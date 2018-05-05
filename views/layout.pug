@@ -2,9 +2,27 @@ doctype html
 html
   head
     title This is pug documentation testing
+    link(rel='stylesheet' href='/bower/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet' href='/css/main.css')
   body
-    block content
-    br
-    hr
-    footer
-      p copyright &copy; 2018
+    nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+      a.navbar-brand(href='/') Node Express app
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarCollapse.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.active
+            a.nav-link(href='/')
+              | Home 
+              span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='/articles/add') Add articles
+    .container
+      block content
+      br
+      hr
+      footer
+        p copyright &copy; 2018
+    script(src='/bower/jquery/dist/jquery.js')
+    script(src='/bower/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/main.js')

@@ -28,7 +28,10 @@ let Article = require('./models/article');
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+// Public folder for static assets
+app.use(express.static(path.join(__dirname,'public')));
 
 
 // Load View Engine
@@ -49,6 +52,15 @@ app.get('/',function(req,res) {
       articles: articles
     });
   }
+  });
+});
+
+//Get Single articles
+app.get('/article/:id',function (req , res) {
+  Article.findById(req.params.id, function (err,article) {
+    res.render('article',{
+      article:article
+    });
   });
 });
 
@@ -73,6 +85,45 @@ app.post('/articles/add',function(req,res) {
   });
 });
 
+//Load EDit Form
+app.get('/article/edit/:id',function (req , res) {
+  Article.findById(req.params.id, function (err,article) {
+    res.render('edit_article',{
+      title:'Edit Article',
+      article:article
+    });
+  });
+});
+
+// Update Submit POST route
+app.post('/articles/edit/:id',function(req,res) {
+  let article= {};
+  article.title =req.body.title;
+  article.author =req.body.author;
+  article.body =req.body.body;
+
+  let query={_id:req.params.id}
+
+  Article.update(query, article, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+        res.redirect('/');
+    }
+  });
+});
+
+app.delete('/article/:id',function (req,res) {
+  let query = {_id:req.params.id}
+
+  Article.remove(query, function(err){
+    if(err){
+      console.log(err);
+    }
+    res.send('Success');
+  });
+});
 // Start Server
 app.listen(3000,function () {
   console.log('Server Started on port 3000');
